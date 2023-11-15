@@ -30,8 +30,8 @@ const cvs = document.querySelector('canvas')
     const ctx = cvs.getContext('2d')
 
     function init() {
-      cvs.width = window.innerWidth
-      cvs.height = window.innerHeight
+      cvs.width = window.innerWidth * devicePixelRatio
+      cvs.height = window.innerHeight * devicePixelRatio
     }
     init()
 
