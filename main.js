@@ -58,8 +58,9 @@ const cvs = document.querySelector('canvas')
       }
     }
     class Graph{
-      constructor(pointNumber = 30){
+      constructor(pointNumber = 30, maxDis = 200){
         this.points = new Array(pointNumber).fill(0).map(() => new Point())
+        this.maxDis = maxDis
       }
       draw(){
         for(let i = 0; i < this.points.length; i++) {
@@ -67,11 +68,14 @@ const cvs = document.querySelector('canvas')
           p1.draw()
           for(let j = i + 1; j < this.points.length; j++) {
             const p2 = this.points[j]
+            const d = Math.sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
+            if(d > this.maxDis) continue
+        
             ctx.beginPath()
             ctx.moveTo(p1.x, p1.y)
             ctx.lineTo(p2.x, p2.y)
             ctx.closePath()
-            ctx.strokeStyle = 'rgb(200,200,200)'
+            ctx.strokeStyle = `rgba(200,200,200, ${1 - d / this.maxDis})`
             ctx.stroke()
           }
         }
