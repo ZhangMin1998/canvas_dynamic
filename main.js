@@ -59,8 +59,24 @@ const cvs = document.querySelector('canvas')
           const xDis = this.xSpeed * duration
           const yDis = this.ySpeed * duration
           // 新坐标
-          const x = this.x + xDis
-          const y = this.y + yDis
+          let x = this.x + xDis
+          let y = this.y + yDis
+
+          // 超出画布就反向
+          if(x > cvs.width - this.r/2) {
+            x = cvs.width - this.r/2
+            this.xSpeed = -this.xSpeed
+          } else if (x < 0) {
+            x = 0
+            this.xSpeed = -this.xSpeed
+          }
+          if(y > cvs.height - this.r/2) {
+            y = cvs.height - this.r/2
+            this.ySpeed = -this.ySpeed
+          } else if (y < 0) {
+            y = 0
+            this.ySpeed = -this.ySpeed
+          }
 
           this.x = x
           this.y = y
@@ -106,3 +122,5 @@ const cvs = document.querySelector('canvas')
     }
     const g = new Graph()
     g.draw()
+
+    // 总结canvas动画：把之前的擦掉，更新位置重新画一遍！！！
