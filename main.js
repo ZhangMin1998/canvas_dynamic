@@ -45,8 +45,26 @@ const cvs = document.querySelector('canvas')
         this.r = 6
         this.x = getRandomInt(0, cvs.width - this.r/2)
         this.y = getRandomInt(0, cvs.height - this.r/2)
+        this.xSpeed = getRandomInt(-50, 50)
+        this.ySpeed = getRandomInt(-50, 50)
+        this.lastDrawTime = null  // 上一次作图时间
       }
       draw(){
+        // 更新坐标
+        if (this.lastDrawTime) {
+          // console.log(111)
+          // 计算新坐标
+          const duration = (Date.now() - this.lastDrawTime) / 1000
+          // 距离
+          const xDis = this.xSpeed * duration
+          const yDis = this.ySpeed * duration
+          // 新坐标
+          const x = this.x + xDis
+          const y = this.y + yDis
+
+          this.x = x
+          this.y = y
+        }
         ctx.beginPath()
         ctx.arc(this.x,this.y,6,0,2*Math.PI)
         ctx.fillStyle = 'rgb(200,200,200)'
@@ -55,6 +73,7 @@ const cvs = document.querySelector('canvas')
         ctx.arc(this.x,this.y,6,0,2*Math.PI)
         ctx.fillStyle = 'rgb(200,200,200)'
         ctx.fill()
+        this.lastDrawTime = Date.now()
       }
     }
     class Graph{
@@ -63,6 +82,10 @@ const cvs = document.querySelector('canvas')
         this.maxDis = maxDis
       }
       draw(){
+        requestAnimationFrame(() => { // 每次渲染的时候重新执行draw方法
+          this.draw()
+        })
+        ctx.clearRect(0,0,cvs.width, cvs.height) // 清空画布
         for(let i = 0; i < this.points.length; i++) {
           const p1 = this.points[i]
           p1.draw()
